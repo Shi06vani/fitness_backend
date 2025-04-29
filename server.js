@@ -14,11 +14,14 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-
+    origin: '*', // in production, specify your frontend domain
+    methods: ['GET', 'POST'],
+    transports: ['websocket', 'polling'],
+    credentials: true,
   },
+  allowEIO3: true // for older clients
 });
+
 
 const users = {};
 
@@ -66,6 +69,7 @@ const nocache = (_, resp, next) => {
   resp.header("Pragma", "no-cache");
   next();
 };
+
 
 app.post("/generate-token", nocache, (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
